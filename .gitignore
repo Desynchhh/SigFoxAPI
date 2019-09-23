@@ -1,3 +1,6 @@
+.gitignore
 .env
-package-lock.json
 node_modules
+mongo connect.PNG
+Arduino/.vscode
+web.config

@@ -1,19 +1,35 @@
+// NPM imports
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
-
+// Custom module imports
+const decode = require('../controllers/decoders')
+const datahandler = require('../controllers/datahandler')
+// Model imports
 const MkrFox1200 = require('../models/mkrfox1200')
 
 // Handle POST request
 router.post('/', (req, res) => {
-  const { device, time, data } = req.body
+  // Destructure body
+  const { deviceId, time, data, lat, lng } = req.body
+  
+  // Convert data according to protocol
+  const temp = datahandler.getTemp(data)
+  const hum = datahandler.getHum(data)
+
   const mkrfox1200 = new MkrFox1200({
     _id: mongoose.Types.ObjectId(),
-    device,
-    time,
-    data
+    deviceId,
+    time: decode.epochToDate(time),
+    latitude: lat,
+    longtitude: lng,
+    data: {
+      temperature: temp,
+      humidity: hum,
+    }
   })
 
+  // Save to DB
   mkrfox1200.save()
     .then(result => {
       console.log(result)
