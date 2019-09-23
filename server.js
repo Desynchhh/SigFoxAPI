@@ -1,8 +1,9 @@
-// Imports
+// Module imports
 require('dotenv').config()
 const express = require('express')
-const mkrfox1200Routes = require('./api/routes/mkrfox1200')
 const mongoose = require('mongoose')
+// Route imports
+const mkrfox1200Routes = require('./api/routes/mkrfox1200')
 
 // Init express
 app = express()
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 // Use API router
 app.use('/api/mkrfox1200', mkrfox1200Routes)
 
+// Connect to MongoDB database
 mongoose.connect(`mongodb+srv://admin:${process.env.MONGO_ATLAS_PWD}@node-sigfox-api-v4no9.mongodb.net/test?retryWrites=true&w=majority`, {
 	//useMongoClient: true
 	useNewUrlParser: true,
@@ -47,6 +49,7 @@ app.use((err, req, res, next) => {
 })
 
 // Start server
-app.listen(process.env.PORT, () => {
-  console.log(`Server starting running on port ${process.env.PORT}`)
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(`Server starting running on port ${port}`)
 })
